@@ -1,0 +1,189 @@
+/* Modern Dark Theme for Vehicle Dashboards */
+body {
+    background-color: #121212;
+    color: #ffffff;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 1000px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2rem;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: #00d4ff;
+}
+
+/* Video Layout */
+.video-container {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    background: #000;
+    display: inline-block;
+}
+
+#webcam {
+    width: 100%;
+    max-width: 640px;
+    display: block;
+}
+
+#output_canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Stats Dashboard */
+.stats-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* This prevents the panel from stretching to the bottom */
+    align-self: flex-start; 
+}
+
+.stat-card {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 15px; /* Reduce padding to shrink size */
+    text-align: center;
+    border: 1px solid #333;
+    /* Remove any fixed height property if you have one */
+    height: auto; 
+    min-width: 150px;
+}
+
+.label {
+    display: block;
+    font-size: 0.8rem;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+/* Dynamic Status Colors */
+.status-safe { color: #2ecc71; font-weight: bold; font-size: 1.2rem; }
+.status-warning { color: #f1c40f; font-weight: bold; font-size: 1.2rem; }
+.status-danger { 
+    color: #e74c3c; 
+    font-weight: bold; 
+    font-size: 1.2rem;
+    animation: blink 0.5s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* --- REACTION TEST OVERLAY STYLES --- */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(18, 18, 18, 0.98); /* Near solid black to hide dashboard */
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.test-box {
+    background: #1e1e1e;
+    padding: 40px;
+    border-radius: 20px;
+    border: 2px solid #00d4ff;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+}
+
+#target-area {
+    width: 300px;
+    height: 300px;
+    background: #121212;
+    margin: 30px auto;
+    position: relative;
+    border-radius: 10px;
+    border: 1px solid #333;
+    overflow: hidden; /* Keep target inside */
+    cursor: crosshair;
+}
+
+#target {
+    width: 50px;
+    height: 50px;
+    background: #e74c3c;
+    border-radius: 50%;
+    position: absolute;
+    box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+#target:active {
+    transform: scale(0.9);
+}
+
+.main-btn {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    background: #00d4ff;
+    color: #121212;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.main-btn:hover {
+    background: #00b4d8;
+    transform: translateY(-2px);
+}
+
+#reaction-result {
+    margin: 15px 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.overlay-history {
+    max-height: 200px;
+    overflow-y: auto; /* Adds a scrollbar if there are many logs */
+    background: rgba(0, 0, 0, 0.05);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+#overlay-incident-body tr {
+    border-bottom: 1px solid #ddd;
+}
+.log-card {
+    grid-column: span 1;
+    max-height: 300px; /* Limits how long the table box can get */
+    overflow-y: auto;  /* Adds scrollbar if logs exceed max-height */
+}
+.dashboard {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Video on left, stats on right */
+    gap: 20px;
+    align-items: start; /* CRITICAL: This keeps cards from stretching vertically */
+}
