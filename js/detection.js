@@ -100,8 +100,8 @@ function checkDrowsiness(ear) {
                 playAlarm(alarmSound);
                 isAlarmPlaying = true;
                 
-                // --- LOG TO DATABASE ---
-                logIncident("Drowsiness", duration.toFixed(1)); 
+                // PASS THE EAR VALUE HERE (formatted to 3 decimal places)
+                logIncident("Drowsiness", duration.toFixed(1), ear.toFixed(3)); 
             }
         }
     } else {
@@ -149,9 +149,9 @@ function detectHeadPose(landmarks) {
 
     return "FORWARD";
 }
-function checkDistraction(headPose) {
+// Add currentEar as a second parameter
+function checkDistraction(headPose, currentEar) { 
     const statusBadge = document.getElementById('drive-status');
-    const distractionAudio = document.getElementById('distraction-sound');
 
     if (headPose !== "FORWARD") {
         if (!distractionStart) distractionStart = Date.now();
@@ -165,11 +165,9 @@ function checkDistraction(headPose) {
                 playDistractionAlarm();
                 isDistractionAlarmPlaying = true;
 
-                // --- LOG TO DATABASE ---
-                // We log the incident as soon as the alarm starts playing
-                logIncident("Distraction", duration.toFixed(1));
+                // PASS THE CURRENT EAR HERE
+                logIncident("Distraction", duration.toFixed(1), currentEar.toFixed(3));
                 
-                // Optional: Refresh the UI table if you implemented updateIncidentTable()
                 if (typeof updateIncidentTable === "function") {
                     updateIncidentTable();
                 }
@@ -221,10 +219,11 @@ function stopAlarm(audioElement) {
         audioElement.currentTime = 0; // Resets the sound to the beginning
     }
 }
-function logIncident(type, duration) {
+function logIncident(type, duration, earValue) { // Add earValue parameter
     const formData = new FormData();
     formData.append('type', type);
     formData.append('duration', duration);
+    formData.append('ear_value', earValue); // Add this line
 
     fetch('save_incident.php', {
         method: 'POST',
@@ -232,9 +231,7 @@ function logIncident(type, duration) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Incident saved to safedriveai:", data);
-        
-        // This is the "magic" line that refreshes the UI table
+        console.log("Incident saved:", data);
         if (typeof updateIncidentTable === 'function') {
             updateIncidentTable();
         }

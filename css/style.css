@@ -1,21 +1,28 @@
+/* Update your css/style.css with these themes */
+:root {
+    --primary-blue: #00d4ff;
+    --danger-red: #e74c3c;
+    --bg-dark: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.7);
+}
 /* Modern Dark Theme for Vehicle Dashboards */
 body {
     background-color: #121212;
     color: #ffffff;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
     margin: 0;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    padding: 20px 0;
 }
 
+/* Allow the container to expand for the grid */
 .container {
-    width: 90%;
-    max-width: 1000px;
-    text-align: center;
+    max-width: 1200px; /* Limits width for a professional look */
+    margin: 0 auto;    /* Centers the container horizontally */
+    padding: 0 20px;
 }
-
 header h1 {
     font-size: 2rem;
     letter-spacing: 2px;
@@ -35,10 +42,9 @@ header h1 {
 
 #webcam {
     width: 100%;
-    max-width: 640px;
-    display: block;
+    max-width: none; /* Let the grid decide the width */
+    height: auto;
 }
-
 #output_canvas {
     position: absolute;
     top: 0;
@@ -56,17 +62,6 @@ header h1 {
     align-self: flex-start; 
 }
 
-.stat-card {
-    background: #1a1a1a;
-    border-radius: 12px;
-    padding: 15px; /* Reduce padding to shrink size */
-    text-align: center;
-    border: 1px solid #333;
-    /* Remove any fixed height property if you have one */
-    height: auto; 
-    min-width: 150px;
-}
-
 .label {
     display: block;
     font-size: 0.8rem;
@@ -76,15 +71,31 @@ header h1 {
 }
 
 /* Dynamic Status Colors */
-.status-safe { color: #2ecc71; font-weight: bold; font-size: 1.2rem; }
-.status-warning { color: #f1c40f; font-weight: bold; font-size: 1.2rem; }
-.status-danger { 
-    color: #e74c3c; 
-    font-weight: bold; 
-    font-size: 1.2rem;
-    animation: blink 0.5s infinite;
+/* Update these in your style.css */
+
+/* This fixes the 'System Ready' and other status pills */
+.status-safe, .status-active, .status-focused {
+    background: rgba(39, 174, 96, 0.2); /* Semi-transparent green background */
+    color: #2ecc71;                   /* Bright green text */
+    border: 1px solid #2ecc71;
+    padding: 4px 12px;                /* Reduced padding for a tighter fit */
+    border-radius: 50px;              /* Makes it a pill shape */
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;            /* Prevents it from taking full width */
+    text-align: center;
+    min-width: 80px;
 }
 
+/* If the text inside the stat cards is too large, adjust the card-level styling */
+.stat-card span {
+    display: block;
+    margin-top: 5px;
+}
+
+#expression-val, #drive-status, #attention-val {
+    margin-top: 8px; /* Adds a small gap below the label */
+}
 @keyframes blink {
     0% { opacity: 1; }
     50% { opacity: 0.5; }
@@ -181,9 +192,183 @@ header h1 {
     max-height: 300px; /* Limits how long the table box can get */
     overflow-y: auto;  /* Adds scrollbar if logs exceed max-height */
 }
+/* Container for the whole dashboard */
+/* The Grid Logic */
+/* Centering the Dashboard Columns */
 .dashboard {
-    display: grid;
-    grid-template-columns: 2fr 1fr; /* Video on left, stats on right */
+    display: flex;
+    justify-content: center; /* Centers the left and right columns */
+    gap: 25px;
+    margin-top: 20px;
+}
+.left-col, .right-col {
+    display: flex;
+    flex-direction: column;
     gap: 20px;
-    align-items: start; /* CRITICAL: This keeps cards from stretching vertically */
+}
+
+/* Fix for the Video sizing */
+.video-container {
+    width: 100%;
+    position: relative;
+    border-radius: 12px;
+    background: #000;
+}
+
+.graph-card {
+    grid-column: 1; /* Place graph directly under camera */
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 20px;
+    border: 1px solid #333;
+}
+
+/* Right Column: Stats and Table */
+.stats-panel {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Force Chart Visibility */
+.chart-container {
+    position: relative;
+    height: 250px !important; /* Forces the height for Chart.js */
+    width: 100%;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px); /* The "Glass" effect */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-blue);
+}
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.export-tools {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-export {
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    background: #333;
+    color: #00d4ff;
+    border: 1px solid #00d4ff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-export:hover {
+    background: #00d4ff;
+    color: #121212;
+}
+.main-header {
+    width: 100%;
+    background: #16212e;
+    padding: 15px 0;
+    border-bottom: 2px solid #00d4ff;
+    margin-bottom: 30px;
+}
+.header-content {
+    display: flex;
+    justify-content: space-between; /* Puts branding left, badge right */
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.branding {
+    display: flex;
+    align-items: center; /* Vertical centering of logo and text */
+    gap: 15px;           /* Space between logo and title */
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-logo {
+    height: 50px; /* Adjust size to fit header */
+    width: auto;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.title-container h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+.developer-tag {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #00d4ff;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+.status-safe {
+    background: rgba(39, 174, 96, 0.2);
+    color: #2ecc71;
+    border: 1px solid #2ecc71;
+    padding: 4px 12px;
+    border-radius: 50px;
+}
+
+@keyframes breathing {
+    0% { box-shadow: 0 0 5px rgba(39, 174, 96, 0.4); }
+    50% { box-shadow: 0 0 15px rgba(39, 174, 96, 0.8); }
+    100% { box-shadow: 0 0 5px rgba(39, 174, 96, 0.4); }
+}
+/* Logo Resizing */
+.app-logo {
+    height: 45px;       /* Shrinks logo to fit beside text */
+    width: auto;
+    border-radius: 5px;
+}
+.title-text h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    line-height: 1;
+}
+/* The red version of your status pills */
+/* The danger state for Yawning/Drowsiness */
+.status-danger {
+    background: rgba(231, 76, 60, 0.2) !important;
+    color: #e74c3c !important;
+    border: 1px solid #e74c3c !important;
+    padding: 4px 12px;
+    border-radius: 50px;
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+    animation: pulse-red 1s infinite;
+}
+
+@keyframes pulse-red {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
 }

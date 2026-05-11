@@ -1,0 +1,16 @@
+{
+  "short_name": "SafeDrive",
+  "name": "SafeDrive AI - Driver Monitoring",
+  "icons": [
+    {
+      "src": "assets/my_logo.png",
+      "type": "image/jpeg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/index.php",
+  "background_color": "#0b1118",
+  "display": "standalone",
+  "theme_color": "#00d4ff",
+  "description": "AI-powered real-time driver drowsiness detection system."
+}
